@@ -11,18 +11,14 @@
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat; 
-    font-size: xx-large;
+    font-size: x-large;
 }
 
 .logo-container {
     margin-bottom: 2rem;
 }
-
-.form-container {
-    background-color: #ec9b00;
-    padding: 2rem;
-    border-radius: 4px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+.logo{
+    height:150px;
 }
 
 h2 {
@@ -38,18 +34,11 @@ label {
     margin-bottom: 0.5rem;
 }
 
-input[type="text"],
-input[type="password"] {
+input[type="text"]{
     width: 100%;
     padding: 0.5rem;
     border-radius: 4px;
     border: 1px solid black;
     font-size: large;
-}
-button{
-    color:#ec9b00;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 

@@ -1,13 +1,14 @@
 import React from 'react';
 import '../../App.css';
 import Grid from '../Grid'
+import TicketContainer from '../TicketContainer';
 
 function Lottery() {
   return (
     <>
     <div className='lottery'>
-      <h1>Lottery</h1>
       <Grid />
+      <TicketContainer />
     </div>
     </>
   );

@@ -5,14 +5,12 @@ import { useHistory } from 'react-router-dom';
 const SignIn = () => {
   const history = useHistory();
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
   const handleSubmit = async(e) => {
     e.preventDefault();
 
     // Perform sign-in logic here
     // ...
-    var response_holder = false;
+    var response_holder = true;
     try {
       var accountName = document.getElementById("username").value;
       const keychain = window.hive_keychain;
@@ -44,11 +42,10 @@ const SignIn = () => {
         history.push('/');//redirect to homepage
       } 
       else {
-        alert('Login unsuccessful');
+        alert('Username does not exist, Sign up on Hive to Sign in');
       }
     // Reset form fields
     setUsername('');
-    setPassword('');
   };
 
   return (
@@ -59,7 +56,7 @@ const SignIn = () => {
       </div>
 
       <div className="form-container">
-        <h2>Sign In</h2>
+        <h2>Hive Sign In</h2>
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -72,18 +69,6 @@ const SignIn = () => {
               required
             />
           </div>
-
-          <div className="form-group">
-            <label htmlFor="password">Password:</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
           <button type="submit" className="submit-btn">Sign In</button>
         </form>
         

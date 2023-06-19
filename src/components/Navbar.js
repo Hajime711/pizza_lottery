@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from './Button';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 
@@ -71,7 +70,7 @@ function Navbar() {
             </li>
           </ul>
           <Link to='/sign-in'>
-          <button id='signin_btn'><Button buttonStyle='btn--outline'>HIVE SIGN IN</Button></button>
+          <button id='signin_btn'>HIVE SIGN IN</button>
           </Link>
           <li><a href="/"><i id="logoutIcon" class="fas fa-sign-out-alt hidden"></i></a></li>
         </div>
