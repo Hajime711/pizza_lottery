@@ -1,12 +1,9 @@
 import React from 'react';
 import './Grid.css';
 
-function Grid() {
+function Grid({bookedBoxes}) {
   const gridSize = 5;
   const cells = [];
-  const bookedBoxes = [];
-  //get booked boxes from blockchain
-  //bookeboxes = bla bla
 
   function getRandomColor() {
     const colors = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#00FFFF']; // Sample colors

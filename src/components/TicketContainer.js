@@ -5,16 +5,13 @@ import { useHistory } from 'react-router-dom';
 
 Modal.setAppElement('#root'); // Set the root element for accessibility
 
-function TicketContainer() {
+function TicketContainer({ stats}) {
     const history = useHistory();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [error, setError] = useState('');
-
-    const stats = {
-        availableTickets: 40,
-        totalTicketsSold: 10,
-        revenue: 500
-    };
+    const [row, setRow] = useState('');
+    const [column, setColumn] = useState('');
+    const color = '#fff';
         
     const openModal = () => {
         setModalIsOpen(true);
@@ -38,11 +35,32 @@ function TicketContainer() {
         console.log("Buy Tickets");
     };
     const BuyTickets = () => {
-        //retreive booked users json from blockchain
-        //check row and column and make sure it isnt already booked
-        //check if pizza is available in account
+        const cellid = `${row}${column}`;
+        if(row>5 || column>5 ||row<0 ||column<0){
+            alert('Invalid row or column number entered, enter from 5X5 GRID given')
+        }
+        //check if this user already exists, and add to their selected boxes
+        else if(stats.user_exist){
+            //check cellid is not in stats.booked
+            //check if pizza is available in account
+            //add to stats.booked
+            stats.booked.forEach((boxId) => {
+                const bookedBox = document.getElementById(boxId);
+                if (bookedBox) {
+                  bookedBox.style.backgroundColor = color;
+                }
+              });
+        }
+        else{
+            //check row and column and make sure it isnt in stats.booked
+            //check if pizza is available in account
+            //create new list and add box coordinates to that
+            
+        }
         //change the color of booked boxes to any single color
-        //upload updated json to blockchain
+        //edit stats.jsonobj
+        //upload to blockchain
+        //edit the stats accordingly
         closeModal();
     }
     return (
@@ -71,11 +89,13 @@ function TicketContainer() {
                 type="text"
                 name="row"
                 placeholder="Row"
+                onChange={(e) => setRow(e.target.value)}
                 />
                 <input
                 type="text"
                 name="column"
                 placeholder="Column"
+                onChange={(e) => setColumn(e.target.value)}
                 />
             </div>
             {error && <p className="error">{error}</p>}
