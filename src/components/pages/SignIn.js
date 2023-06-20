@@ -15,7 +15,7 @@ const SignIn = () => {
       var accountName = document.getElementById("username").value;
       const keychain = window.hive_keychain;
       keychain.requestCustomJson(null, accountName, 'Posting', JSON.stringify({LoginID:["9292cd44ccaef8b73a607949cc787f1679ede10b-93"],currency:"PIZZA"}), 'Logging in the Pizza Lottery', (response) => {
-        //response_holder = response.success;
+        response_holder = response.success;
           if(response.success === true){
             console.log('logged in');
           }

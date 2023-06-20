@@ -1,16 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import './Timer.css';
+import ConfettiEffect from './ConfettiEffect';
 
-function Timer() {
+function Timer({stats}) {
   const [remainingTime, setRemainingTime] = useState(0);
-  const timerDuration = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
+  const [isTimerEnded, setIsTimerEnded] = useState(false);
 
   useEffect(() => {
+    //6*60
+    const timerDuration = 5 * 60000; // 6 hours in milliseconds
     const timerStartTime = localStorage.getItem('timerStartTime');
     const currentTime = Date.now();
 
-    if (timerStartTime) {
-      const elapsedTime = currentTime - timerStartTime;
+    const handleTimeout = () => {
+      //choose a random from the booked boxes
+      const randomIndex = Math.floor(Math.random() * stats.booked.length);
+      const randomNumber = stats.booked[randomIndex];
+      console.log('Random Number:', randomNumber);
+      //find which user the number belongs to
+      let winner = null;
+      for (const username in stats.json_obj) {
+        if (stats.json_obj[username].includes(randomNumber)) {
+          winner = username;
+          break;
+        }
+      }
+      console.log('WINNER IS:');
+      console.log(winner);
+      console.log("total won:");
+      console.log(stats.revenue);
+      //send the pool prize to the user
+      //transaction code
+      //upload json object to blockchain
+      const json_obj = {};
+      setIsTimerEnded(true);
+      //Reset the timer by updating the timer start time
+      const timerStartTime = Date.now();
+      localStorage.setItem('timerStartTime', timerStartTime.toString());
+      setRemainingTime(timerDuration);
+    };
+
+    const startTimer = () => {
+      setIsTimerEnded(false);
+      const elapsedTime = currentTime - parseInt(timerStartTime);
       const initialRemainingTime = timerDuration - elapsedTime;
 
       if (initialRemainingTime > 0) {
@@ -32,29 +64,20 @@ function Timer() {
           clearInterval(timer); // Clean up the timer when the component unmounts
         };
       } else {
-        // Timer has already finished
-        console.log('Timer already finished!');
-        setRemainingTime(0);
+        // Timer has already finished or not started yet
+        handleTimeout();
       }
+    };
+
+    if (timerStartTime) {
+      startTimer();
     } else {
       // Timer has not been started yet
       const timerStartTime = currentTime;
-      localStorage.setItem('timerStartTime', timerStartTime);
+      localStorage.setItem('timerStartTime', timerStartTime.toString());
+      startTimer();
     }
-  }, []);
-
-  const handleTimeout = () => {
-    // check if all grid boxes are booked
-    //randomize the booked boxes
-    //send the pool prize to the user
-    //optional: display a woohoo message
-    //clear the stats
-    console.log('Timer finished!');
-    // Reset the timer by updating the timer start time
-    const timerStartTime = Date.now();
-    localStorage.setItem('timerStartTime', timerStartTime);
-    setRemainingTime(timerDuration);
-  };
+  },[]); 
 
   // Format the remaining time into hours, minutes, and seconds
   const formatTime = (time) => {
@@ -68,10 +91,16 @@ function Timer() {
   };
 
   return (
-    <div className="timer-component">
-      <div className="timer-label">Time remaining to draw</div>
-      <div className="timer">{formatTime(remainingTime)}</div>
+    <div className='container'>
+      <img src="/icons/lottery.png" alt="icon" className="icon" />
+      <div className="timer-component">
+        {isTimerEnded && <ConfettiEffect />}
+        <div className='icon-container'>{isTimerEnded && <img src="/icons/winner.png" alt="Image" />} </div> 
+        <div className="timer-label">Time remaining to draw</div>
+        <div className="timer">{formatTime(remainingTime)}</div>
+      </div>
     </div>
+    
   );
 }
 

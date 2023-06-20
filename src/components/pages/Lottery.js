@@ -6,24 +6,30 @@ import Timer from '../Timer'
 
 function Lottery() {
   //retreive booked users json from blockchain
-  //check if user is logged in
-  //check if user exist in retrieved data, yes: booked boxes = user boxes, no: empty boxes
-  //user not logged in then store all booked boxes
-  const bookedBoxes = [];
-  //check if this user exists
-  const user_exist = false;
+  //dummy data
+  const jsonobj = {
+    hajime:[22,33,44],
+    dlmmqb:[31,32],
+    spirit:[34,55],
+    roma:[42]
+  } 
+  var bookedBoxes = [];
+  bookedBoxes = [].concat(...Object.values(jsonobj));
+  const count = bookedBoxes.length;
+  console.log(bookedBoxes);
+  
   //set the stats accordingly
   const stats = {
-    availableTickets: 40,
-    totalTicketsSold: 10,
-    revenue: 500,
-    user:user_exist,
+    availableTickets: 25 - count,
+    totalTicketsSold: count,
+    revenue: 0.01*count,
     booked: bookedBoxes,
-    full_rec: 'jsonobj' 
+    json_obj: jsonobj
   };
+
   return (
     <>
-    <div ><Timer /></div>
+    <div ><Timer stats={stats}/></div>
     <div className='lottery'>
       <Grid bookedBoxes={bookedBoxes}/>
       <TicketContainer stats={stats}/>

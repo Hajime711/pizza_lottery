@@ -69,3 +69,18 @@ button:hover {
   width: 300px;
   margin-left: 40px;  
 }
+.icon-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  color: #ffffff;
+  z-index: 9999;
+}
+.logo{
+  height:150px;
+}
+.logo-container {
+  margin-bottom: 2rem;
+}

@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 
 Modal.setAppElement('#root'); // Set the root element for accessibility
 
-function TicketContainer({ stats}) {
+function TicketContainer({stats}) {
     const history = useHistory();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [error, setError] = useState('');
@@ -31,36 +31,49 @@ function TicketContainer({ stats}) {
             alert('You need to Sign in to your Hive Wallet to buy tickets')
             history.push('/sign-in');//redirect to sign in page
         }
-        // This can be customized according to your requirements
-        console.log("Buy Tickets");
     };
     const BuyTickets = () => {
-        const cellid = `${row}${column}`;
+        const cellid = parseInt(`${row}${column}`);
+        const button = document.getElementById('signin_btn');
+        var booked = [];
+        const username = button.innerText.toLowerCase();
         if(row>5 || column>5 ||row<0 ||column<0){
             alert('Invalid row or column number entered, enter from 5X5 GRID given')
         }
         //check if this user already exists, and add to their selected boxes
-        else if(stats.user_exist){
-            //check cellid is not in stats.booked
-            //check if pizza is available in account
-            //add to stats.booked
-            stats.booked.forEach((boxId) => {
-                const bookedBox = document.getElementById(boxId);
-                if (bookedBox) {
-                  bookedBox.style.backgroundColor = color;
-                }
-              });
+        else if(stats.booked.includes(cellid)){
+            alert('This ticket is already booked!');
         }
         else{
-            //check row and column and make sure it isnt in stats.booked
-            //check if pizza is available in account
-            //create new list and add box coordinates to that
-            
+            if(true){//check if pizza is there in account
+                if(stats.json_obj.hasOwnProperty(username)){//username already exists
+                    booked = stats.json_obj[username];
+                    booked.push(cellid);
+                    stats.json_obj[username] = booked;
+                    console.log(booked);
+                }
+                else{//user doesnt exist already
+                    booked.push(cellid);
+                    stats.json_obj[username] = booked;
+                    console.log(booked);
+                }
+            }
+            else{
+                alert('Insufficient funds in your wallet');
+            }
+            //change the color of booked boxe to green
+            const gridCell = document.getElementById(cellid);
+            if (gridCell) {
+                gridCell.style.backgroundColor = "#00FF00"; // Replace "your-color" with the desired background color
+            }
+            //upload stats json obj to blockchain to blockchain
+            console.log(stats.json_obj);
+            //edit the stats accordingly
+            const count=booked.length;
+            stats.totalTicketsSold = stats.totalTicketsSold+count;
+            stats.availableTickets = stats.availableTickets-count;
+            stats.revenue = stats.revenue+(count*0.01);
         }
-        //change the color of booked boxes to any single color
-        //edit stats.jsonobj
-        //upload to blockchain
-        //edit the stats accordingly
         closeModal();
     }
     return (
