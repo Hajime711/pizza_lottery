@@ -1,64 +1,61 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../App.css';
-import Grid from '../Grid'
+import Grid from '../Grid';
 import TicketContainer from '../TicketContainer';
-import Timer from '../Timer'
-import { useEffect, useState } from 'react';
+import Timer from '../Timer';
+import axios from 'axios';
 
 function Lottery() {
-  //retreive booked users json from blockchain
-  var bookedBoxes = [];
-  var jsonobj = {
-    hajime711:[11,22,33],
-    dlmmqb:[44,55]
+  const [bookedBoxes, setBookedBoxes] = useState([]);
+  const [jsonData, setJsonObj] = useState({});
+  const [stats, setStats] = useState({});
+
+  const fetchJsonData = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/json');
+      if(response){
+        const jsonData = response.data[response.data.length-1].data;
+        setJsonObj(jsonData);
+      }
+      if (Object.keys(jsonData).length === 0 && jsonData.constructor === Object) {
+        console.log('jsonData is empty');
+      } else {
+        const boxes = [].concat(...Object.values(jsonData));
+        console.log(boxes);
+        setBookedBoxes(boxes);
+      }
+      setJsonObj(jsonData);
+    } catch (error) {
+      console.error(error);
+    }
   };
-  var stats = {};
+
   useEffect(() => {
-    retrieveCustomJson();
+    fetchJsonData();
   }, []);
-  const retrieveCustomJson = async () => {
-    //retrieve data from hiveblockchain
-    // try {
-    //   const customJsonId = 'user_data'; 
-    //   window.hive_keychain.requestCustomJson('hajime711',customJsonId,'Posting',JSON.stringify({}),'retrieving data',(response) => {
-    //     if (response.success && response.result) {
-    //       jsonobj = JSON.parse(response.result);
-    //       console.log('Retrieved Custom JSON Data:', jsonobj);
-    //     } else {
-    //       console.error('Error retrieving custom JSON:', response);
-    //     }
-    //   });
-      
-    // } catch (error) {
-    //   console.error('Error retrieving custom JSON:', error);
-    // }
-  };
-  if (Object.keys(jsonobj).length === 0 && jsonobj.constructor === Object) {
-    console.log('jsonobj is empty');
-  }
-  else{
-    bookedBoxes = [].concat(...Object.values(jsonobj));
-    console.log(bookedBoxes);  
-  }
-  const count = bookedBoxes.length;
-  //set the stats accordingly
-  stats = {
-    availableTickets: 25 - count,
-    totalTicketsSold: count,
-    revenue: 0.01*count,
-    booked: bookedBoxes,
-    json_obj: jsonobj
-  };
+
+  useEffect(() => {
+    const count = bookedBoxes.length;
+    // Set the stats accordingly
+    const newStats = {
+      availableTickets: 25 - count,
+      totalTicketsSold: count,
+      revenue: 0.01 * count,
+      booked: bookedBoxes,
+      json_obj: jsonData
+    };
+    setStats(newStats);
+  }, [bookedBoxes, jsonData]);
+
   return (
     <>
-    <div ><Timer stats={stats}/></div>
-    <div className='lottery'>
-      <Grid bookedBoxes={bookedBoxes}/>
-      <TicketContainer stats={stats}/>
-    </div>
+      <Timer />
+      <div className='lottery'>
+        <Grid bookedBoxes={bookedBoxes} />
+        <TicketContainer stats={stats} />
+      </div>
     </>
   );
 }
-
 
 export default Lottery;

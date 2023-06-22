@@ -1,26 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import './Timer.css';
 import ConfettiEffect from './ConfettiEffect';
+import axios from 'axios';
 
-function Timer({stats}) {
+function Timer() {
   const [remainingTime, setRemainingTime] = useState(0);
   const [isTimerEnded, setIsTimerEnded] = useState(false);
+  const [boxes, setBookedBoxes] = useState([]);
+  const [jsonobj, setJsonObj] = useState({});
 
   useEffect(() => {
     //6*60
-    const timerDuration = 5 * 60 * 6 * 60000; // 6 hours in milliseconds
+    const timerDuration = 5 *6* 60000; // 6 hours in milliseconds
     const timerStartTime = localStorage.getItem('timerStartTime');
     const currentTime = Date.now();
-
     const handleTimeout = async() => {
-      //choose a random from the booked boxes
-      const randomIndex = Math.floor(Math.random() * stats.booked.length);
-      const randomNumber = stats.booked[randomIndex];
+      //get the updated data
+      try {
+        const response = await axios.get('http://localhost:5000/json');
+        const jsonobj = response.data[response.data.length-1].data;
+        console.log(jsonobj);
+        if (Object.keys(jsonobj).length === 0 && jsonobj.constructor === Object) {
+          console.log('jsonobj is empty');
+        } else {
+          const boxes = [].concat(...Object.values(jsonobj));
+          console.log(boxes);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+      //choose a random number from the boxes 
+      const randomIndex = Math.floor(Math.random() * boxes.length);
+      const randomNumber = boxes[randomIndex];
       console.log('Random Number:', randomNumber);
       //find which user the number belongs to
       let winner = null;
-      for (const username in stats.json_obj) {
-        if (stats.json_obj[username].includes(randomNumber)) {
+      for (const username in jsonobj) {
+        if (jsonobj[username].includes(randomNumber)) {
           winner = username;
           break;
         }
@@ -28,28 +44,26 @@ function Timer({stats}) {
       console.log('WINNER IS:');
       console.log(winner);
       console.log("total won:");
-      console.log(stats.revenue);
+      console.log(0.01*boxes.length);
+      
       //send the pool prize to the user
-      //transaction code
       // if (window.hive_keychain) {
       //   const keychain = window.hive_keychain;
-      //   keychain.requestSendToken('dlmmqb',winner, '0.010', 'Opening a Lottery Box 1', 'PIZZA', (response) => {
+      //   keychain.requestSendToken('admin-pizza',winner, '0.010', 'Opening Lottery Box', 'PIZZA', (response) => {
       //     if (response.success === true){
-      //         console.log('TOKEN SENT!');  
+      //         console.log('TOKENS SENT!');  
       //     }
       //     console.log(response);
       //   });
       // }
-      //upload json object to blockchain
-      // const json_obj = {};
-      // try {
-      //   const keychain = window.hive_keychain;
-      //   keychain.requestCustomJson(null (account), 'user_data', 'posting', JSON.stringify(json_obj), 'upload the user_data', (response) => {
-      //     console.log(response);
-      //   });
-      // }catch (error) {
-      //   console.log('Upload Error at reset', error);
-      // }
+      //clear data in db
+      try {
+        const response = await axios.post('http://localhost:5000/json', {});
+        console.log(response.data); 
+      } catch (error) {
+        console.error(error);
+      }
+      //upload winner in list in db
       setIsTimerEnded(true);
       //Reset the timer by updating the timer start time
       const timerStartTime = Date.now();
@@ -94,7 +108,7 @@ function Timer({stats}) {
       localStorage.setItem('timerStartTime', timerStartTime.toString());
       startTimer();
     }
-  },[stats.booked,stats.json_obj,stats.revenue]); 
+  },[]); 
 
   // Format the remaining time into hours, minutes, and seconds
   const formatTime = (time) => {

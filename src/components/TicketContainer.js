@@ -2,6 +2,7 @@ import './TicketContainer.css'
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 
 Modal.setAppElement('#root'); // Set the root element for accessibility
 
@@ -35,6 +36,7 @@ function TicketContainer({stats}) {
         const cellid = parseInt(`${row}${column}`);
         const button = document.getElementById('signin_btn');
         var booked = [];
+        var count=0;
         const username = button.innerText.toLowerCase();
         if(row>5 || column>5 ||row<0 ||column<0){
             alert('Invalid row or column number entered, enter from 5X5 GRID given')
@@ -49,43 +51,44 @@ function TicketContainer({stats}) {
                     booked = stats.json_obj[username];
                     booked.push(cellid);
                     stats.json_obj[username] = booked;
+                    count++;
                     console.log(booked);
                 }
                 else{//user doesnt exist already
                     booked.push(cellid);
                     stats.json_obj[username] = booked;
+                    count++;
                     console.log(booked);
                 }
                 //transaction code
                 // if (window.hive_keychain) {
                 //   const keychain = window.hive_keychain;
-                //   keychain.requestSendToken(username, 'dlmmqb', '0.01', 'Buying a Lottery Ticket', 'PIZZA', (response) => {
+                //   keychain.requestSendToken(username, 'admin-pizza', '0.010', 'Buying a Lottery Ticket', 'PIZZA', (response) => {
                 //     if (response.success === true){
                 //         console.log('TOKEN SENT!');  
                 //     }
                 //     console.log(response);
                 //   });
                 // }    
-                //change the color of booked boxe to green
+                //change the color of booked box to black
                 const gridCell = document.getElementById(cellid);
                 if (gridCell) {
                     gridCell.style.backgroundColor = "#000"; // Replace "your-color" with the desired background color
                 }
-                //upload stats json obj to blockchain
-                // try {
-                //   const keychain = window.hive_keychain;
-                //   keychain.requestCustomJson(null (account), 'user_data', 'posting ', JSON.stringify(json_obj), 'upload the user_data', (response) => {
-                //     console.log(response);
-                //   });
-                // }catch (error) {
-                //   console.log('Upload Error after ticketing', error);
-                // }
+                //upload stats json obj to mongo
+                try {
+                    console.log('posting:',stats.json_obj);
+                    const response = await axios.post('http://localhost:5000/json', stats.json_obj);
+                    console.log(response.data); 
+                    console.log('data posted!!');
+                } catch (error) {
+                console.error(error);
+                }
                 //edit the stats accordingly
-                const count=booked.length;
                 stats.totalTicketsSold = stats.totalTicketsSold+count;
                 stats.availableTickets = stats.availableTickets-count;
                 stats.revenue = stats.revenue+(count*0.01);
-                }
+            }
             else{
                 alert('Insufficient funds in your wallet');
             }
