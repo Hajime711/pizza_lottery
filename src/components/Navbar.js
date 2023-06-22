@@ -29,7 +29,7 @@ function Navbar() {
         <div className='navbar-container'>
           <Link to='/' className='navbar-logo' onClick={closeMobileMenu}>
             PL 
-            <i className='fas fa-pizza-slice'  />
+            <i className='fas fa-pizza-slice' style={{ color: '#ec9b00' }} />
           </Link>
           <div className='menu-icon' onClick={handleClick}>
             <i className={click ? 'fas fa-times' : 'fas fa-bars'} />

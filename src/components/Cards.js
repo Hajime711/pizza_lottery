@@ -5,41 +5,41 @@ import CardItem from './CardItem';
 function Cards() {
   return (
     <div className='cards'>
-      <h1>Check out these EPIC Destinations!</h1>
+      <h1>EPIC Features of PIZZA LOTTERY!</h1>
       <div className='cards__container'>
         <div className='cards__wrapper'>
           <ul className='cards__items'>
             <CardItem
-              src='images/img-9.jpg'
+              src='icons/transparency.png'
               text='Explore the hidden waterfall deep inside the Amazon Jungle'
-              label='Adventure'
-              path='/services'
+              label='Transparent'
+              path='/lottery'
             />
             <CardItem
-              src='images/img-2.jpg'
+              src='images/hive-logo.png'
               text='Travel through the Islands of Bali in a Private Cruise'
-              label='Luxury'
-              path='/services'
+              label='Hive Engine'
+              path='/lottery'
             />
           </ul>
           <ul className='cards__items'>
             <CardItem
-              src='images/img-3.jpg'
+              src='images/pizza-hive.png'
               text='Set Sail in the Atlantic Ocean visiting Uncharted Waters'
-              label='Mystery'
-              path='/services'
+              label='Pizza-crypto'
+              path='/lottery'
             />
             <CardItem
-              src='images/img-4.jpg'
-              text='Experience Football on Top of the Himilayan Mountains'
-              label='Adventure'
-              path='/products'
+              src='icons/transaction.png'
+              text='THe most secure system bla bla'
+              label='secure'
+              path='/lottery'
             />
             <CardItem
-              src='images/img-8.jpg'
+              src='icons/fair-trade.png'
               text='Ride through the Sahara Desert on a guided camel tour'
-              label='Adrenaline'
-              path='/sign-up'
+              label='Fair'
+              path='/lottery'
             />
           </ul>
         </div>

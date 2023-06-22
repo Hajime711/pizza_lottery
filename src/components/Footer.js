@@ -18,16 +18,16 @@ function Footer() {
       <div class='footer-links'>
         <div className='footer-link-wrapper'>
           <div class='footer-link-items'>
-            <h2>About Us</h2>
-            <Link to='/sign-in'>How it works</Link>
-            <Link to='/'>Testimonials</Link>
-            <Link to='/'>Terms of Service</Link>
+            <h2>About Hive</h2>
+            <a  href={'https://hive.io/'} target="_blank" rel="noopener noreferrer">Hive Blockchain</a>
+            <a  href={'https://hive-keychain.com/'} target="_blank" rel="noopener noreferrer">Hive Keychain</a>
+            <a  href={'https://hive.io/eco/'} target="_blank" rel="noopener noreferrer">Hive Ecosystem</a>
           </div>
           <div class='footer-link-items'>
-            <h2>Contact Us</h2>
-            <Link to='/'>Contact</Link>
-            <Link to='/'>Support</Link>
-            <Link to='/'>Sponsorships</Link>
+            <h2>Pizza Lottery</h2>
+            <a  href={'https://hive.pizza/'} target="_blank" rel="noopener noreferrer">Pizza Guild</a>
+            <a  href={'https://www.bahria.edu.pk/bukc/'} target="_blank" rel="noopener noreferrer">Sponsor</a>
+            <a  href={'https://github.com/Hajime711/pizza-lottery'} target="_blank" rel="noopener noreferrer">Source code</a>
           </div>
         </div>
       </div>
@@ -36,51 +36,14 @@ function Footer() {
           <div class='footer-logo'>
             <Link to='/' className='social-logo'>
               PL
-              <i class='fas fa-pizza-slice' />
+              <i class='fas fa-pizza-slice' style={{ color: '#ec9b00' }}/>
             </Link>
           </div>
           <small class='website-rights'>PizzaLottery © 2023</small>
           <div class='social-icons'>
-            <Link
-              class='social-icon-link facebook'
-              to='/'
-              target='_blank'
-              aria-label='Facebook'
-            >
-              <i class='fab fa-facebook-f' />
-            </Link>
-            <Link
-              class='social-icon-link instagram'
-              to='/'
-              target='_blank'
-              aria-label='Instagram'
-            >
-              <i class='fab fa-instagram' />
-            </Link>
-            <Link
-              class='social-icon-link youtube'
-              to='/'
-              target='_blank'
-              aria-label='Youtube'
-            >
-              <i class='fab fa-youtube' />
-            </Link>
-            <Link
-              class='social-icon-link twitter'
-              to='/'
-              target='_blank'
-              aria-label='Twitter'
-            >
-              <i class='fab fa-twitter' />
-            </Link>
-            <Link
-              class='social-icon-link twitter'
-              to='/'
-              target='_blank'
-              aria-label='LinkedIn'
-            >
-              <i class='fab fa-linkedin' />
-            </Link>
+            <a className='social-logo' href={'https://github.com/Hajime711/pizza-lottery'} target="_blank" rel="noopener noreferrer"><i class='fab fa-github'/></a>
+            <a className='social-logo' href={'https://discordapp.com/users/838012541485580290'} target="_blank" rel="noopener noreferrer"><i class='fab fa-discord'/></a>
+            <a className='social-logo' href={'https://www.instagram.com/thehive_official/?hl=en'} target="_blank" rel="noopener noreferrer"><i class='fab fa-instagram'/></a>
           </div>
         </div>
       </section>
@@ -89,13 +52,3 @@ function Footer() {
 }
 
 export default Footer;
-
-// <form>
-//             <input
-//               className='footer-input'
-//               name='email'
-//               type='email'
-//               placeholder='Your Email'
-//             />
-//             <Button buttonStyle='btn--outline'>Subscribe</Button>
-//           </form>

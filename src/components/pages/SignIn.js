@@ -7,45 +7,38 @@ const SignIn = () => {
   const [username, setUsername] = useState('');
   const handleSubmit = async(e) => {
     e.preventDefault();
-
-    // Perform sign-in logic here
-    // ...
-    var response_holder = true;
-    try {
-      var accountName = document.getElementById("username").value;
-      const keychain = window.hive_keychain;
-      keychain.requestCustomJson(null, accountName, 'Posting', JSON.stringify({LoginID:["9292cd44ccaef8b73a607949cc787f1679ede10b-93"],currency:"PIZZA"}), 'Logging in the Pizza Lottery', (response) => {
-        response_holder = response.success;
-          if(response.success === true){
-            console.log('logged in');
-          }
-          console.log('NOT LOGGED IN');
-          
+    var accountName = document.getElementById("username").value;
+      try {
+        window.hive_keychain.requestSignBuffer(accountName,'Sign in to Pizza Lottery','posting',(response) => {
+        if (response.success) {
+          console.log('Sign-in successful!');
+          console.log('logged in');
+          //store this username and display on navbar now
+          const button = document.getElementById('signin_btn');
+          const image = document.createElement('img');
+          image.src = '/icons/man.png';
+          image.alt = 'Image';
+          image.className = 'button-image';
+          const text = document.createTextNode(accountName.toUpperCase());
+          button.innerHTML = '';
+          button.appendChild(image);
+          button.appendChild(text);
+          button.disabled = true;
+          const logoutIcon = document.getElementById('logoutIcon');
+          logoutIcon.classList.remove('hidden');
+          // Reset form fields
+          setUsername('');
+          history.push('/');//redirect to homepage
+        }
+        else{
+          console.log(response);
+          alert('Username does not exist, Sign up on Hive!');
+        }
+           
       });
-      }catch (error) {
-        console.log('Sign-in error:', error);
+      } catch (error) {
+        console.error('Error signing in:', error);
       }
-      if(response_holder === true){
-        //store this username and display on navbar now
-        const button = document.getElementById('signin_btn');
-        const image = document.createElement('img');
-        image.src = '/icons/man.png';
-        image.alt = 'Image';
-        image.className = 'button-image';
-        const text = document.createTextNode(accountName.toUpperCase());
-        button.innerHTML = '';
-        button.appendChild(image);
-        button.appendChild(text);
-        button.disabled = true;
-        const logoutIcon = document.getElementById('logoutIcon');
-        logoutIcon.classList.remove('hidden');
-        history.push('/');//redirect to homepage
-      } 
-      else {
-        alert('Username does not exist, Sign up on Hive to Sign in');
-      }
-    // Reset form fields
-    setUsername('');
   };
 
   return (

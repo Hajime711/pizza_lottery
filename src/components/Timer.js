@@ -8,11 +8,11 @@ function Timer({stats}) {
 
   useEffect(() => {
     //6*60
-    const timerDuration = 5 * 60000; // 6 hours in milliseconds
+    const timerDuration = 5 * 60 * 6 * 60000; // 6 hours in milliseconds
     const timerStartTime = localStorage.getItem('timerStartTime');
     const currentTime = Date.now();
 
-    const handleTimeout = () => {
+    const handleTimeout = async() => {
       //choose a random from the booked boxes
       const randomIndex = Math.floor(Math.random() * stats.booked.length);
       const randomNumber = stats.booked[randomIndex];
@@ -31,8 +31,25 @@ function Timer({stats}) {
       console.log(stats.revenue);
       //send the pool prize to the user
       //transaction code
+      // if (window.hive_keychain) {
+      //   const keychain = window.hive_keychain;
+      //   keychain.requestSendToken('dlmmqb',winner, '0.010', 'Opening a Lottery Box 1', 'PIZZA', (response) => {
+      //     if (response.success === true){
+      //         console.log('TOKEN SENT!');  
+      //     }
+      //     console.log(response);
+      //   });
+      // }
       //upload json object to blockchain
-      const json_obj = {};
+      // const json_obj = {};
+      // try {
+      //   const keychain = window.hive_keychain;
+      //   keychain.requestCustomJson(null (account), 'user_data', 'posting', JSON.stringify(json_obj), 'upload the user_data', (response) => {
+      //     console.log(response);
+      //   });
+      // }catch (error) {
+      //   console.log('Upload Error at reset', error);
+      // }
       setIsTimerEnded(true);
       //Reset the timer by updating the timer start time
       const timerStartTime = Date.now();
@@ -77,7 +94,7 @@ function Timer({stats}) {
       localStorage.setItem('timerStartTime', timerStartTime.toString());
       startTimer();
     }
-  },[]); 
+  },[stats.booked,stats.json_obj,stats.revenue]); 
 
   // Format the remaining time into hours, minutes, and seconds
   const formatTime = (time) => {
@@ -95,7 +112,7 @@ function Timer({stats}) {
       <img src="/icons/lottery.png" alt="icon" className="icon" />
       <div className="timer-component">
         {isTimerEnded && <ConfettiEffect />}
-        <div className='icon-container'>{isTimerEnded && <img src="/icons/winner.png" alt="Image" />} </div> 
+        <div className='icon-container'>{isTimerEnded && <img src="/icons/money.png" alt="icon" />} </div> 
         <div className="timer-label">Time remaining to draw</div>
         <div className="timer">{formatTime(remainingTime)}</div>
       </div>

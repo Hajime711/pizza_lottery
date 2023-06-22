@@ -11,7 +11,6 @@ function TicketContainer({stats}) {
     const [error, setError] = useState('');
     const [row, setRow] = useState('');
     const [column, setColumn] = useState('');
-    const color = '#fff';
         
     const openModal = () => {
         setModalIsOpen(true);
@@ -32,7 +31,7 @@ function TicketContainer({stats}) {
             history.push('/sign-in');//redirect to sign in page
         }
     };
-    const BuyTickets = () => {
+    const BuyTickets = async() => {
         const cellid = parseInt(`${row}${column}`);
         const button = document.getElementById('signin_btn');
         var booked = [];
@@ -57,22 +56,39 @@ function TicketContainer({stats}) {
                     stats.json_obj[username] = booked;
                     console.log(booked);
                 }
-            }
+                //transaction code
+                // if (window.hive_keychain) {
+                //   const keychain = window.hive_keychain;
+                //   keychain.requestSendToken(username, 'dlmmqb', '0.01', 'Buying a Lottery Ticket', 'PIZZA', (response) => {
+                //     if (response.success === true){
+                //         console.log('TOKEN SENT!');  
+                //     }
+                //     console.log(response);
+                //   });
+                // }    
+                //change the color of booked boxe to green
+                const gridCell = document.getElementById(cellid);
+                if (gridCell) {
+                    gridCell.style.backgroundColor = "#000"; // Replace "your-color" with the desired background color
+                }
+                //upload stats json obj to blockchain
+                // try {
+                //   const keychain = window.hive_keychain;
+                //   keychain.requestCustomJson(null (account), 'user_data', 'posting ', JSON.stringify(json_obj), 'upload the user_data', (response) => {
+                //     console.log(response);
+                //   });
+                // }catch (error) {
+                //   console.log('Upload Error after ticketing', error);
+                // }
+                //edit the stats accordingly
+                const count=booked.length;
+                stats.totalTicketsSold = stats.totalTicketsSold+count;
+                stats.availableTickets = stats.availableTickets-count;
+                stats.revenue = stats.revenue+(count*0.01);
+                }
             else{
                 alert('Insufficient funds in your wallet');
             }
-            //change the color of booked boxe to green
-            const gridCell = document.getElementById(cellid);
-            if (gridCell) {
-                gridCell.style.backgroundColor = "#00FF00"; // Replace "your-color" with the desired background color
-            }
-            //upload stats json obj to blockchain to blockchain
-            console.log(stats.json_obj);
-            //edit the stats accordingly
-            const count=booked.length;
-            stats.totalTicketsSold = stats.totalTicketsSold+count;
-            stats.availableTickets = stats.availableTickets-count;
-            stats.revenue = stats.revenue+(count*0.01);
         }
         closeModal();
     }
