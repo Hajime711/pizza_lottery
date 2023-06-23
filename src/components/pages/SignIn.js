@@ -45,11 +45,11 @@ const SignIn = () => {
     <div className="sign-in">
 
       <div className="logo-container">
-        <img src="/icons/crypto.png" alt="Logo" className="logo" />
+        <img src="/icons/hivewallet.png" alt="Logo" className="logo" />
       </div>
 
       <div className="form-container">
-        <h2>Hive Sign In</h2>
+        <h2>Hive Wallet</h2>
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -64,6 +64,8 @@ const SignIn = () => {
           </div>
           <button type="submit" className="submit-btn">Sign In</button>
         </form>
+        <p>If you don't Already have an Account, Sign up on Hive and get all the Hive features in one Account</p>
+        <a href={'https://signup.hive.io/'} target='_blank' rel="noopener noreferrer">Sign up</a> 
         
       </div>
       </div>

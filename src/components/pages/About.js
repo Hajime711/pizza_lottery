@@ -18,13 +18,6 @@ const About = () => {
       <p>
         Additionally, the algorithm incorporates procedural generation to ensure endless variety. Each game session is unique, offering fresh challenges and surprises every time you play.
       </p>
-      <div className='heading'>Technical Details</div>
-      <p>
-        Our mini game is built using React, a powerful JavaScript library for building user interfaces. The algorithm itself is implemented using a combination of JavaScript and advanced mathematical models.
-      </p>
-      <p>
-        The frontend of the game is crafted with attention to detail, providing stunning visuals and smooth animations to enhance your gaming experience. We have also optimized the code to ensure fast loading times and optimal performance on various devices.
-      </p>
       <div className='heading'>Join the Fun!</div>
       <p>
         We invite you to dive into the world of our mini game and experience the thrill firsthand. Challenge yourself, compete with friends, and unlock achievements as you master the game powered by our innovative algorithm.
