@@ -1,18 +1,40 @@
 import './TicketContainer.css'
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Modal from 'react-modal';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+import { retrieveFromDB, uploadToDB } from './Database';
+import { buyTicket } from './Transaction';
 
 Modal.setAppElement('#root'); // Set the root element for accessibility
 
-function TicketContainer({stats}) {
+function TicketContainer() {
     const history = useHistory();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [error, setError] = useState('');
     const [row, setRow] = useState('');
     const [column, setColumn] = useState('');
-        
+    const [totalTicketsSold,setSold] = useState(0);
+    const [availableTickets,setAvailable] = useState(25);
+    const [revenue,setRevenue] = useState(0.0);
+
+    useEffect(() => {
+        const loadData = async() => {
+            var bookedBoxes = [];
+            var jsonData = await retrieveFromDB();
+            if (Object.keys(jsonData).length === 0 && jsonData.constructor === Object) {
+                console.log('empty json');
+            } else {
+                bookedBoxes = [].concat(...Object.values(jsonData));
+            }
+                
+            //edit the stats accordingly
+            setSold(bookedBoxes.length);
+            setAvailable(25 - bookedBoxes.length);
+            setRevenue(0.01 * bookedBoxes.length); 
+        }
+        loadData();
+      }, [totalTicketsSold]);
+
     const openModal = () => {
         setModalIsOpen(true);
     };
@@ -35,72 +57,59 @@ function TicketContainer({stats}) {
     const BuyTickets = async() => {
         const cellid = parseInt(`${row}${column}`);
         const button = document.getElementById('signin_btn');
+        var bookedBoxes = [];
         var booked = [];
-        var count=0;
+        var jsonData = await retrieveFromDB();
+        if (Object.keys(jsonData).length === 0 && jsonData.constructor === Object) {
+            console.log('empty json');
+        } else {
+            bookedBoxes = [].concat(...Object.values(jsonData));
+        }
         const username = button.innerText.toLowerCase();
         if(row>5 || column>5 ||row<0 ||column<0){
             alert('Invalid row or column number entered, enter from 5X5 GRID given')
         }
         //check if this user already exists, and add to their selected boxes
-        else if(stats.booked.includes(cellid)){
+        else if(bookedBoxes.includes(cellid)){
             alert('This ticket is already booked!');
         }
         else{
-            if(true){//check if pizza is there in account
-                if(stats.json_obj.hasOwnProperty(username)){//username already exists
-                    booked = stats.json_obj[username];
-                    booked.push(cellid);
-                    stats.json_obj[username] = booked;
-                    count++;
-                    console.log(booked);
-                }
-                else{//user doesnt exist already
-                    booked.push(cellid);
-                    stats.json_obj[username] = booked;
-                    count++;
-                    console.log(booked);
-                }
-                //transaction code
-                // if (window.hive_keychain) {
-                //   const keychain = window.hive_keychain;
-                //   keychain.requestSendToken(username, 'admin-pizza', '0.010', 'Buying a Lottery Ticket', 'PIZZA', (response) => {
-                //     if (response.success === true){
-                //         console.log('TOKEN SENT!');  
-                //     }
-                //     console.log(response);
-                //   });
-                // }    
+            if(jsonData.hasOwnProperty(username)){//username already exists
+                booked = jsonData[username];
+                booked.push(cellid);
+                bookedBoxes.push(cellid);
+                jsonData[username] = booked;
+                console.log('booked1:',booked);
+            }
+            else{//user doesnt exist already
+                booked.push(cellid);
+                bookedBoxes.push(cellid);
+                jsonData[username] = booked;
+                console.log('booked2:',booked);
+            } 
+            const response = await buyTicket(username);
+            if(response === true){
+                const respo = uploadToDB(jsonData);
+                console.log(respo);
+                //edit the stats accordingly
+                setSold(bookedBoxes.length);
+                setAvailable(25 - bookedBoxes.length);
+                setRevenue(0.01 * bookedBoxes.length); 
                 //change the color of booked box to black
                 const gridCell = document.getElementById(cellid);
                 if (gridCell) {
                     gridCell.style.backgroundColor = "#000"; // Replace "your-color" with the desired background color
                 }
-                //upload stats json obj to mongo
-                try {
-                    console.log('posting:',stats.json_obj);
-                    const response = await axios.post('http://localhost:5000/json', stats.json_obj);
-                    console.log(response.data); 
-                    console.log('data posted!!');
-                } catch (error) {
-                console.error(error);
-                }
-                //edit the stats accordingly
-                stats.totalTicketsSold = stats.totalTicketsSold+count;
-                stats.availableTickets = stats.availableTickets-count;
-                stats.revenue = stats.revenue+(count*0.01);
-            }
-            else{
-                alert('Insufficient funds in your wallet');
-            }
+            }   
         }
         closeModal();
     }
     return (
     <div className="form-container">
-        <div className="stats">
-        <p>Available Tickets: {stats.availableTickets}</p>
-        <p>Total Tickets Sold: {stats.totalTicketsSold}</p>
-        <p>Revenue: {stats.revenue} PIZZA</p>
+        <div className='stats'>
+        <h2>Available Tickets: {availableTickets}</h2>
+        <h2>Total Tickets Sold: {totalTicketsSold}</h2>
+        <h2>Revenue: {revenue} PIZZA</h2>
         </div>
         <button className="button" onClick={handleBuy}>Buy Tickets</button>
         <Modal

@@ -6,22 +6,11 @@
 }
 
 .home,
-.about,
 .lottery{
   display: flex;
   height: 90vh;
   align-items: center;
   justify-content: center;
-  font-size: medium;
-}
-
-.about {
-  background-image: url('/images/img-2.jpg');
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  color: #fff;
-  font-size: 100px;
 }
 
 .lottery {
@@ -30,8 +19,9 @@
   background-size: fill;
   background-repeat: no-repeat;
   color: #fff;
-  font-size: 100px;
+  font-size: x-large;
 }
+
 button{
   color:#ec5300;
   display: block;

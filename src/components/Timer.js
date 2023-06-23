@@ -1,78 +1,71 @@
 import React, { useEffect, useState } from 'react';
 import './Timer.css';
 import ConfettiEffect from './ConfettiEffect';
-import axios from 'axios';
+import {retrieveFromDB, uploadToDB} from './Database'
+import {sendToWinner} from './Transaction'
 
 function Timer() {
   const [remainingTime, setRemainingTime] = useState(0);
   const [isTimerEnded, setIsTimerEnded] = useState(false);
-  const [boxes, setBookedBoxes] = useState([]);
-  const [jsonobj, setJsonObj] = useState({});
-
   useEffect(() => {
     //6*60
-    const timerDuration = 5 *6* 60000; // 6 hours in milliseconds
+    const timerDuration = 7*60000; // 6 hours in milliseconds
     const timerStartTime = localStorage.getItem('timerStartTime');
     const currentTime = Date.now();
+    let winner = null;
     const handleTimeout = async() => {
       //get the updated data
       try {
-        const response = await axios.get('http://localhost:5000/json');
-        const jsonobj = response.data[response.data.length-1].data;
-        console.log(jsonobj);
+        const jsonobj = await retrieveFromDB();
         if (Object.keys(jsonobj).length === 0 && jsonobj.constructor === Object) {
           console.log('jsonobj is empty');
-        } else {
+        }else {
           const boxes = [].concat(...Object.values(jsonobj));
-          console.log(boxes);
+          console.log(boxes);   
+          //choose a random number from the boxes 
+          const randomIndex = Math.floor(Math.random() * boxes.length);
+          const randomNumber = boxes[randomIndex];
+          console.log('Random Number:', randomNumber);
+          //find which user the number belongs to
+          for (const username in jsonobj) {
+            if (jsonobj[username].includes(randomNumber)) {
+              winner = username;
+              break;
+            }
+          }
+          console.log('WINNER IS:');
+          console.log(winner);
+          console.log("total won:");
+          const amount = 0.010 * parseFloat(boxes.length);
+          const fixedAmount = amount.toFixed(3);
+          const revenue = fixedAmount.toString();
+          console.log(revenue);
+          //send the pool prize to the user
+          const response = await sendToWinner(winner,revenue);
+          if(response === true){
+            const message = winner + ' you just won the LOTTERY! You will recieve the POLL PRIZE now!';
+            alert(message);
+            uploadToDB({});
+            //upload winner in list in db
+          } 
+          else{
+            alert('There is an issue with the transaction, please contact admin to get your prize sent to you');
+          }
         }
       } catch (error) {
         console.error(error);
       }
-      //choose a random number from the boxes 
-      const randomIndex = Math.floor(Math.random() * boxes.length);
-      const randomNumber = boxes[randomIndex];
-      console.log('Random Number:', randomNumber);
-      //find which user the number belongs to
-      let winner = null;
-      for (const username in jsonobj) {
-        if (jsonobj[username].includes(randomNumber)) {
-          winner = username;
-          break;
-        }
-      }
-      console.log('WINNER IS:');
-      console.log(winner);
-      console.log("total won:");
-      console.log(0.01*boxes.length);
-      
-      //send the pool prize to the user
-      // if (window.hive_keychain) {
-      //   const keychain = window.hive_keychain;
-      //   keychain.requestSendToken('admin-pizza',winner, '0.010', 'Opening Lottery Box', 'PIZZA', (response) => {
-      //     if (response.success === true){
-      //         console.log('TOKENS SENT!');  
-      //     }
-      //     console.log(response);
-      //   });
-      // }
-      //clear data in db
-      try {
-        const response = await axios.post('http://localhost:5000/json', {});
-        console.log(response.data); 
-      } catch (error) {
-        console.error(error);
-      }
-      //upload winner in list in db
-      setIsTimerEnded(true);
       //Reset the timer by updating the timer start time
+      setIsTimerEnded(true);
+      const timer = setTimeout(() => {
+        setIsTimerEnded(false);
+      }, 7000);
       const timerStartTime = Date.now();
       localStorage.setItem('timerStartTime', timerStartTime.toString());
       setRemainingTime(timerDuration);
     };
 
     const startTimer = () => {
-      setIsTimerEnded(false);
       const elapsedTime = currentTime - parseInt(timerStartTime);
       const initialRemainingTime = timerDuration - elapsedTime;
 

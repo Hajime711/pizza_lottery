@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import './Grid.css';
+import { retrieveFromDB } from './Database';
 
-function Grid({ bookedBoxes }) {
+function Grid() {
   const gridSize = 5;
   const [bookedCells, setBookedCells] = useState([]);
-
+  const getbookedCells = async() => {
+      var jsonData = await retrieveFromDB();
+      if (Object.keys(jsonData).length === 0 && jsonData.constructor === Object) {
+        return [];
+      } else {
+        return [].concat(...Object.values(jsonData));
+      }
+  }
   useEffect(() => {
     const getRandomColor = () => {
       const colors = ['#ec5300', '#ec9b00', '#ecca00']; // Sample colors
@@ -12,20 +20,20 @@ function Grid({ bookedBoxes }) {
       return colors[randomIndex];
     };
 
-    const assignRandomColors = () => {
-      const updatedBookedCells = bookedBoxes.map((boxId) => ({
+    const assignRandomColors = async() => {
+      const bookedCells = await getbookedCells();
+      console.log(bookedCells);
+      const updatedBookedCells = bookedCells.map((boxId) => ({
         id: boxId,
         color: getRandomColor(),
       }));
-
       setBookedCells(updatedBookedCells);
     };
 
     assignRandomColors();
-  }, [bookedBoxes]);
+  }, []);
 
   const cells = [];
-
   for (let row = 1; row <= gridSize; row++) {
     for (let col = 1; col <= gridSize; col++) {
       const cellId = parseInt(`${row}${col}`);
