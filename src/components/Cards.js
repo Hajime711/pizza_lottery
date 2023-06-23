@@ -11,13 +11,13 @@ function Cards() {
           <ul className='cards__items'>
             <CardItem
               src='icons/transparency.png'
-              text='Explore the hidden waterfall deep inside the Amazon Jungle'
+              text='Transparent transactions, trusted ecosystem'
               label='Transparent'
               path='/lottery'
             />
             <CardItem
               src='images/hive-logo.png'
-              text='Travel through the Islands of Bali in a Private Cruise'
+              text='Fueling engagement and value within the Hive blockchain ecosystem'
               label='Hive Engine'
               path='/lottery'
             />
@@ -25,19 +25,19 @@ function Cards() {
           <ul className='cards__items'>
             <CardItem
               src='images/pizza-hive.png'
-              text='Set Sail in the Atlantic Ocean visiting Uncharted Waters'
+              text='Empowering decentralized tokenization and exchange'
               label='Pizza-crypto'
               path='/lottery'
             />
             <CardItem
               src='icons/transaction.png'
-              text='THe most secure system bla bla'
+              text='Fortified by robust security measures, safeguarding digital assets and transactions'
               label='secure'
               path='/lottery'
             />
             <CardItem
               src='icons/fair-trade.png'
-              text='Ride through the Sahara Desert on a guided camel tour'
+              text='Ensuring fairness through transparent and unbiased randomization'
               label='Fair'
               path='/lottery'
             />

@@ -4,26 +4,33 @@ import './About.css'; // Assuming you have a separate CSS file for styling
 const About = () => {
   return (
     <div className="about-container">
-      <h1>About Our Mini Game</h1>
+      <h1>About Our Mini Game - PIZZA LOTTERY</h1>
       <p className="description">
         Welcome to our exciting mini game! We've created a unique algorithm that powers this game, providing you with an immersive and enjoyable experience.
       </p>
-      <div className='heading'>Algorithm Overview</div>
-      <p>
-        Our algorithm is designed to provide dynamic and challenging gameplay. It leverages cutting-edge technology to create a seamless and interactive gaming environment.
-      </p>
-      <p>
-        At its core, the algorithm utilizes artificial intelligence and machine learning techniques to adapt to the player's skill level. It analyzes your gameplay patterns, reaction times, and decision-making strategies to tailor the difficulty level accordingly.
-      </p>
-      <p>
-        Additionally, the algorithm incorporates procedural generation to ensure endless variety. Each game session is unique, offering fresh challenges and surprises every time you play.
-      </p>
       <div className='heading'>Join the Fun!</div>
       <p>
-        We invite you to dive into the world of our mini game and experience the thrill firsthand. Challenge yourself, compete with friends, and unlock achievements as you master the game powered by our innovative algorithm.
+        We invite you to dive into the world of our mini game and experience the crypto thrill. It depends upon your luck, High risk High Reward, Invest and Win now!
       </p>
       <p>
-        Get ready to embark on an unforgettable gaming journey!
+        Get ready to embark on an unforgettable CRYPTO journey!
+      </p>
+      <div className='heading'>Our Goal</div>
+      <p>
+        All credit goes to two awesome Software Engineering students who were bored in their degree and decided to 
+        make a Hive Engine based mini Lottery game using the most intriguing token called PIZZA only so that students
+        who are bored like us can get to know about Crypto in a fun way!
+      </p>
+      <div className='heading'>Algorithm Overview</div>
+      <p>
+        Our algorithm is designed to draw a completely Random Box and open it.
+      </p>
+      <p>
+        At its core, the algorithm utilizes Randomization and high security features of the Hive blockchain so don't worry you will
+        not get robbed of crypto, but only return with a pocket full of PIZZA only if you deserve it UWU.
+      </p>
+      <p>
+        Additionally, the algorithm incorporates Multiple play, offering fresh curiousity and surprises every time you play.
       </p>
     </div>
   );

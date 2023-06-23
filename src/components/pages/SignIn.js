@@ -26,7 +26,6 @@ const SignIn = () => {
           button.disabled = true;
           const logoutIcon = document.getElementById('logoutIcon');
           logoutIcon.classList.remove('hidden');
-          // Reset form fields
           setUsername('');
           history.push('/');//redirect to homepage
         }

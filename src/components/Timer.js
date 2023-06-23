@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import './Timer.css';
 import ConfettiEffect from './ConfettiEffect';
-import {retrieveFromDB, uploadToDB} from './Database'
-import {sendToWinner} from './Transaction'
+import {retrieveFromDB, uploadToDB} from './dboperations'
+import {sendToWinner} from './transactions'
 
 function Timer() {
   const [remainingTime, setRemainingTime] = useState(0);
   const [isTimerEnded, setIsTimerEnded] = useState(false);
   useEffect(() => {
-    //6*60
-    const timerDuration = 7*60000; // 6 hours in milliseconds
+    //86400000 24h
+    //900000 15 m
+    const timerDuration = 86400000; 
     const timerStartTime = localStorage.getItem('timerStartTime');
     const currentTime = Date.now();
     let winner = null;
@@ -18,10 +19,9 @@ function Timer() {
       try {
         const jsonobj = await retrieveFromDB();
         if (Object.keys(jsonobj).length === 0 && jsonobj.constructor === Object) {
-          console.log('jsonobj is empty');
+          console.log('empty json');
         }else {
           const boxes = [].concat(...Object.values(jsonobj));
-          console.log(boxes);   
           //choose a random number from the boxes 
           const randomIndex = Math.floor(Math.random() * boxes.length);
           const randomNumber = boxes[randomIndex];
@@ -33,20 +33,16 @@ function Timer() {
               break;
             }
           }
-          console.log('WINNER IS:');
-          console.log(winner);
-          console.log("total won:");
-          const amount = 0.010 * parseFloat(boxes.length);
+          console.log('Winner:',winner);
+          const amount = 1.000 * parseFloat(boxes.length);
           const fixedAmount = amount.toFixed(3);
           const revenue = fixedAmount.toString();
-          console.log(revenue);
-          //send the pool prize to the user
+          console.log("won:",revenue);
           const response = await sendToWinner(winner,revenue);
           if(response === true){
             const message = winner + ' you just won the LOTTERY! You will recieve the POLL PRIZE now!';
             alert(message);
             uploadToDB({});
-            //upload winner in list in db
           } 
           else{
             alert('There is an issue with the transaction, please contact admin to get your prize sent to you');

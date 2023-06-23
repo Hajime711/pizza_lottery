@@ -2,8 +2,8 @@ import './TicketContainer.css'
 import React, { useState,useEffect } from 'react';
 import Modal from 'react-modal';
 import { useHistory } from 'react-router-dom';
-import { retrieveFromDB, uploadToDB } from './Database';
-import { buyTicket } from './Transaction';
+import { retrieveFromDB, uploadToDB } from './dboperations';
+import { buyTicket } from './transactions';
 
 Modal.setAppElement('#root'); // Set the root element for accessibility
 
@@ -26,11 +26,10 @@ function TicketContainer() {
             } else {
                 bookedBoxes = [].concat(...Object.values(jsonData));
             }
-                
-            //edit the stats accordingly
+            //set the stats 
             setSold(bookedBoxes.length);
             setAvailable(25 - bookedBoxes.length);
-            setRevenue(0.01 * bookedBoxes.length); 
+            setRevenue(1.000 * bookedBoxes.length); 
         }
         loadData();
       }, [totalTicketsSold]);
@@ -45,13 +44,13 @@ function TicketContainer() {
     const handleBuy = () => {
         // Handle the logic for buying ticket
         const button = document.getElementById('signin_btn');
-        if(button.disabled){//user signed in so show modal and perform transactions
+        if(button.disabled){//user signed in so show modal
             console.log('BUYING TICKETS');
             openModal();
         }
         else{
             alert('You need to Sign in to your Hive Wallet to buy tickets')
-            history.push('/sign-in');//redirect to sign in page
+            history.push('/sign-in');
         }
     };
     const BuyTickets = async() => {
@@ -69,36 +68,31 @@ function TicketContainer() {
         if(row>5 || column>5 ||row<0 ||column<0){
             alert('Invalid row or column number entered, enter from 5X5 GRID given')
         }
-        //check if this user already exists, and add to their selected boxes
         else if(bookedBoxes.includes(cellid)){
             alert('This ticket is already booked!');
         }
         else{
-            if(jsonData.hasOwnProperty(username)){//username already exists
+            if(jsonData.hasOwnProperty(username)){
                 booked = jsonData[username];
                 booked.push(cellid);
                 bookedBoxes.push(cellid);
                 jsonData[username] = booked;
-                console.log('booked1:',booked);
             }
             else{//user doesnt exist already
                 booked.push(cellid);
                 bookedBoxes.push(cellid);
                 jsonData[username] = booked;
-                console.log('booked2:',booked);
             } 
             const response = await buyTicket(username);
             if(response === true){
                 const respo = uploadToDB(jsonData);
-                console.log(respo);
-                //edit the stats accordingly
                 setSold(bookedBoxes.length);
                 setAvailable(25 - bookedBoxes.length);
-                setRevenue(0.01 * bookedBoxes.length); 
+                setRevenue(1.000 * bookedBoxes.length); 
                 //change the color of booked box to black
                 const gridCell = document.getElementById(cellid);
                 if (gridCell) {
-                    gridCell.style.backgroundColor = "#000"; // Replace "your-color" with the desired background color
+                    gridCell.style.backgroundColor = "#000"; 
                 }
             }   
         }
@@ -122,7 +116,7 @@ function TicketContainer() {
         <form onSubmit={handleBuy}>
             <div>
             <label>Quantity:1</label>
-            <label>1 ticket is 0.01 PIZZA</label>
+            <label>1 ticket is 1 PIZZA</label>
             </div>
             <div>
                 <label>Ticket:</label>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Grid.css';
-import { retrieveFromDB } from './Database';
+import { retrieveFromDB } from './dboperations';
 
 function Grid() {
   const gridSize = 5;
