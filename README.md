@@ -19,3 +19,10 @@ Our Goal All credit goes to two awesome Software Engineering students who were b
 •	BackEnd: Nodejs 
 •	Database: MongoDB
 
+# How to Run:
+since the website is not live yet, it can't be viewed through a url or weblink (coming soon)
+Hence to run in developer mode
+clone the repository locally
+use 'npm install' and then 'npm run' to run the project
+Server.js file should also be run to start the server for DB
+
