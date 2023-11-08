@@ -16,13 +16,13 @@ Our Goal All credit goes to two awesome Software Engineering students who were b
 # Technologies Used:
 •	API: Hive-engine
 •	Front-End: ReactJS - a client-side JavaScript framework
-•	BackEnd: Nodejs 
+•	BackEnd: Expressjs - framework of Nodejs 
 •	Database: MongoDB
 
 # How to Run:
 since the website is not live yet, it can't be viewed through a url or weblink (coming soon)
 Hence to run in developer mode
 clone the repository locally
-use 'npm install' and then 'npm run' to run the project
-Server.js file should also be run to start the server for DB
+use 'npm install' and then 'npm start' in backend to run the server and in frontend to load the website locally
+
 
