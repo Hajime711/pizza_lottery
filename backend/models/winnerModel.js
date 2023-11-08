@@ -8,7 +8,7 @@ const winnerModel = new Schema({
         type: String,
         require: true
     },
-    draw_number:{
+    draw:{
         type:Number,
         require:true
     },
@@ -18,4 +18,4 @@ const winnerModel = new Schema({
     }
 },{timestamps:true})
 //create model from that schema object and export it
-module.exports = mongoose.Model('winners',userModel)
+module.exports = mongoose.model('winners',winnerModel)

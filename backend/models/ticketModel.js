@@ -4,20 +4,18 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 //create schema object
 const ticketModel = new Schema({
-    ticket:{
+    id:{
         type:Number,
-        required:true
+        required:true,
+        unique:true
     },
-    isBooked:{
+    booked:{
         type:Boolean,
         required:true
     },
     username:{
-        type: String,
-        required: () => {
-            return this.isBooked
-        }
+        type: String
     }
 },{timestamps:true})
 //create model from that schema object and export it
-module.exports = mongoose.Model('users',userModel)
+module.exports = mongoose.model('tickets',ticketModel)

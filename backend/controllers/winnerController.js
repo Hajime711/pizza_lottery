@@ -1,16 +1,18 @@
-//import the model
 const Winner = require('../models/winnerModel')
-//and mongoose
-const mongoose = require('mongoose')
-//create all necessary functions 
 
 const createWinner = async(req,res) => {
-    
+    const {username,draw,amount} = req.body
+    try {
+        const winner = await Winner.create({username,draw,amount})
+        res.status(200).json(winner)
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
 }
 const getWinners = async(req,res) => {
-
+    const winners = await Winner.find({});
+    res.status(200).json(winners)
 }
-//export all the functions
 module.exports = {
     createWinner,
     getWinners
